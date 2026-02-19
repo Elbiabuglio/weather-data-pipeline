@@ -6,7 +6,7 @@ import json
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-path_name = Path(__file__).parent / 'data' / 'weather_data.json'
+path_name = Path(__file__).parent.parent / 'data' / 'weather_data.json'
 columns_name_to_drop = ['weather', 'weather_icon', 'sys.type']
 columns_names_to_rename = {
         "base": "base",
@@ -56,7 +56,7 @@ def create_dataframes(path_name: str) -> pd.DataFrame:
 
 
 def normalize_weather_columns(df: pd.DataFrame) -> pd.DataFrame:
-    df_weather = pd.json_normalize(df['weather']).apply(lambda x: x[0])
+    df_weather = df['weather'].apply(lambda x: pd.Series(x[0]))
     
     df_weather = df_weather.rename(columns={
         'id': 'weather_id',
@@ -88,8 +88,10 @@ def normalize_datetime_columns(df: pd.DataFrame, columns_names: list[str]) -> pd
    logging.info(f"Normalizando colunas de datetime - {columns_names}")
    for name in columns_names:
         df[name] = pd.to_datetime(df[name], unit='s', utc=True).dt.tz_convert('America/Sao_Paulo')
+        
         logging.info(f"Coluna {name} normalizada para datetime com timezone de São Paulo")
-        return df
+   
+   return df
         
         
 def data_transformation():

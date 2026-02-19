@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def extract_data(url:str) -> list:
+def extract_weather_data(url:str) -> list:
     """
     Extracts data from the given URL and returns it as a list of dictionaries.
 
@@ -31,7 +31,7 @@ def extract_data(url:str) -> list:
     output_dir.mkdir(parents=True, exist_ok=True)
     
     with open(output_path, 'w') as f:
-        json.dump(data, f, indent=4)
+        json.dump([data], f, indent=4)
     
     logging.info(f"Dados extraídos e salvos em {output_path}")
     
